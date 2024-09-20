@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>62828fe8-090e-45b8-a09f-83d4e7a1cca7</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectManagement.Common\ProjectManagement.Common.csproj" />
+    <ProjectReference Include="..\Projects.Management.PostgreSql\Projects.Management.PostgreSql.csproj" />
+    <ProjectReference Include="..\Projects.Management.RabbitMq\Projects.Management.RabbitMq.csproj" />
+    <ProjectReference Include="..\Projects.Management.RestApi\Projects.Management.RestApi.csproj" />
+    <ProjectReference Include="..\Projects.Management\Projects.Management.csproj" />
+  </ItemGroup>
+
+</Project>
