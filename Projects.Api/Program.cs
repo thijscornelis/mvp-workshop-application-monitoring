@@ -39,6 +39,7 @@ public class Program
         {
             await using var scope = app.Services.CreateAsyncScope();
             var db = scope.ServiceProvider.GetRequiredService<ProjectDbContext>();
+            await db.Database.EnsureDeletedAsync(CancellationToken.None);
             await db.Database.EnsureCreatedAsync(CancellationToken.None);
         }
 
