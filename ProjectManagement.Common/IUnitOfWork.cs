@@ -1,4 +1,6 @@
-﻿namespace ProjectManagement.Common;
+﻿using Microsoft.AspNetCore.Builder;
+
+namespace ProjectManagement.Common;
 
 public interface IUnitOfWork : IDisposable
 {

@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+using ProjectManagement.Common.Logging;
 using Projects.Management;
 using Projects.Management.PostgreSql;
 using Projects.Management.RabbitMq;
@@ -10,6 +12,8 @@ public class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.SetupLogging();
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -33,7 +37,7 @@ public class Program
         app.UseAuthorization();
         app.MapControllers();
         app.UseHealthChecks("/api/health");
-
+        app.SetupLogging();
 
         if (app.Environment.IsDevelopment())
         {

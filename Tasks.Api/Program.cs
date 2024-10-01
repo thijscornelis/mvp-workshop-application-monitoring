@@ -1,3 +1,4 @@
+using ProjectManagement.Common.Logging;
 using Tasks.Management;
 using Tasks.Management.PostgreSql;
 using Tasks.Management.RestApi;
@@ -9,6 +10,8 @@ public class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.SetupLogging();
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
@@ -31,6 +34,7 @@ public class Program
         app.UseAuthorization();
         app.MapControllers();
         app.UseHealthChecks("/api/health");
+        app.SetupLogging();
 
         if (app.Environment.IsDevelopment())
         {

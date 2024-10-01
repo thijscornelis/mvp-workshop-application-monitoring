@@ -22,7 +22,7 @@ Goal:
 - Write a log when creating a project, containing the request body.
 
 > Do not worry about the fact that structured logs and traces are not visible in the Aspire Dashboard.
-
+	
 # Step 02: Replace the built-in logging framework with Serilog
 
 Replace the built-in logging framework with Serilog. 

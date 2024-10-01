@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ProjectManagement.Common;
 using Projects.Management.Design;
 using Projects.Management.RestApi.Contracts;
@@ -7,7 +8,7 @@ namespace Projects.Management.RestApi;
 
 [ApiController]
 [Route("/api/projects")]
-public class ProjectsController(IProjectManagementFacade facade, IUnitOfWork unitOfWork) : ControllerBase
+public class ProjectsController(ILogger<ProjectsController> logger, IProjectManagementFacade facade, IUnitOfWork unitOfWork) : ControllerBase
 {
     [HttpGet]
     [Route("{id:guid}", Name = "GetProjectById")]
@@ -20,11 +21,11 @@ public class ProjectsController(IProjectManagementFacade facade, IUnitOfWork uni
     [HttpPost]
     public async Task<IActionResult> Post(CreateProjectRequestDto requestDto, CancellationToken cancellationToken)
     {
+        logger.LogInformation("Creating project with {@Request}", requestDto);
         await unitOfWork.StartAsync(cancellationToken);
         var response = await facade.CreateProjectAsync(requestDto, cancellationToken);
         await unitOfWork.CommitAsync(cancellationToken);
         return Created($"/api/projects/{response.Id}", response);
-        
     }
 
     [HttpDelete]
