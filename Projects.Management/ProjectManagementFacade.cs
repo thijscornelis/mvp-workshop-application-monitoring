@@ -8,7 +8,7 @@ internal class ProjectManagementFacade(ICanStoreProject store, ICanFindProject f
 {
     public async Task<Project> CreateProjectAsync(CreateProjectRequest request, CancellationToken cancellationToken)
     {
-        var project = new Project(request.Name);
+        var project = new Project(request.Name, request.Owner);
         await store.AddAsync(project, cancellationToken).ConfigureAwait(false);
         return project;
     }

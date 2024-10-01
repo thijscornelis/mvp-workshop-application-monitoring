@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Destructurama;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Configuration;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -10,12 +13,20 @@ namespace ProjectManagement.Common.Logging;
 
 public static class LoggingExtensions
 {
-    public static void SetupLogging(this IHostApplicationBuilder builder)
+    public static void SetupLogging(this IHostApplicationBuilder builder, Action<LoggerDestructuringConfiguration>? destructuringConfiguration = null)
     {
         builder.Logging.ClearProviders();
 
+        builder.Services.AddHttpContextAccessor();
         builder.Services.AddSerilog(c =>
         {
+            c.Enrich.FromLogContext().Enrich.WithCorrelationId(addValueIfHeaderAbsence: true);
+
+            if (destructuringConfiguration != null)
+            {
+                destructuringConfiguration.Invoke(c.Destructure);
+            }
+
             if (builder.Environment.IsDevelopment())
             {
                 c.MinimumLevel.Verbose();

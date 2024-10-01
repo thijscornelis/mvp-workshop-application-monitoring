@@ -1,9 +1,11 @@
+using Destructurama;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.Common.Logging;
 using Projects.Management;
 using Projects.Management.PostgreSql;
 using Projects.Management.RabbitMq;
 using Projects.Management.RestApi;
+using Projects.Management.RestApi.Contracts;
 
 namespace Projects.Api;
 
@@ -13,7 +15,10 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.SetupLogging();
+        builder.SetupLogging(c =>
+        {
+            c.ByIgnoringProperties<CreateProjectRequestDto>(x => x.Owner);
+        });
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
