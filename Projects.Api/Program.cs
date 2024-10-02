@@ -4,6 +4,7 @@ using ProjectManagement.Common.Logging;
 using ProjectManagement.Common.Otel;
 using Projects.Management;
 using Projects.Management.PostgreSql;
+using Projects.Management.PostgreSql.Design;
 using Projects.Management.RabbitMq;
 using Projects.Management.RestApi;
 using Projects.Management.RestApi.Contracts;
@@ -53,6 +54,9 @@ public class Program
             await db.Database.EnsureDeletedAsync(CancellationToken.None);
             await db.Database.EnsureCreatedAsync(CancellationToken.None);
         }
+
+        // This is a workaround to ensure that the ProjectMetrics class is instantiated
+        app.Services.GetRequiredService<ITrackProjects>();
 
         await app.RunAsync();
     }
