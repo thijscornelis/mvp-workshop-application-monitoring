@@ -39,8 +39,7 @@ public static class LoggingExtensions
             c.MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning);
             c.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning);
             c.WriteTo.Console(theme: AnsiConsoleTheme.Code, applyThemeToRedirectedOutput: true);
-            c.WriteTo.File(new JsonFormatter(),
-                "logs/log.json", rollingInterval: RollingInterval.Hour, retainedFileTimeLimit: TimeSpan.FromDays(7));
+            c.WriteTo.OpenTelemetry();
         });
     }
 
