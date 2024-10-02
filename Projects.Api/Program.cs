@@ -1,6 +1,7 @@
 using Destructurama;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.Common.Logging;
+using ProjectManagement.Common.Otel;
 using Projects.Management;
 using Projects.Management.PostgreSql;
 using Projects.Management.RabbitMq;
@@ -19,6 +20,7 @@ public class Program
         {
             c.ByIgnoringProperties<CreateProjectRequestDto>(x => x.Owner);
         });
+        builder.AddMetrics();
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();

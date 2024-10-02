@@ -1,4 +1,5 @@
 using ProjectManagement.Common.Logging;
+using ProjectManagement.Common.Otel;
 using Tasks.Management;
 using Tasks.Management.PostgreSql;
 using Tasks.Management.RestApi;
@@ -12,6 +13,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.SetupLogging();
+        builder.AddMetrics();
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
