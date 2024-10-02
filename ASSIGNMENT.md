@@ -8,38 +8,31 @@ The solution folders `01. Projects` and `02. Tasks` contain the two services tha
 Each service uses a `hexagonal architecture`. The main goal is that our core project remains technology agnostic, contains the business logic 
 and defines functionality that will be provided by our ports and adapters. 
 
-# Step 01: Logging using .NET built-in logging framework
+# Step 01: Add OpenTelemetry for Logs to the solution
 
-In this step, we will implement logging using the .NET built-in logging framework. 
-We will use the `Microsoft.Extensions.Logging` package to log messages in our services.
-
-Goal:
-- Make sure that the log messages are written to the console.
-- Make sure that, by default, log messages are visible as of the Information level.
-- Make sure that, by default, log messages in Development are visible as of the Trace level.
-- Make sure that the log messages of EntityFramework are visible if their log level is Warning or higher. You can also mute other logs if they are too annoying.
-- Show a log for each request received by the projects and tasks API, showing the request duration.
-- Write a log when creating a project, containing the request body.
-
-> Do not worry about the fact that structured logs and traces are not visible in the Aspire Dashboard.
-	
-# Step 02: Replace the built-in logging framework with Serilog
-
-Replace the built-in logging framework with Serilog. 
+In this step, we will start using OpenTelemetry to expose logs.
 
 Goal:
-- Logs are visible in the console, format the logs as text. 
-- Logs are visible in a file, format the logs as JSON.
-- Log, using Warning level, when the request duration exceeds 500ms
-- Create a file for each hour, and keep the logs for 7 days.
+- Make sure that the log messages are published using OpenTelemetry.
+- The log messages should be visible in the .NET Aspire dashboard.
 
-# Step 03: Add a sensitive field
+# Step 02: Add OpenTelemetry for Metrics to the solution
 
-Add a sensitive field to the `Project` entity. Make sure that the sensitive field can be provided when creating the entity using the API.
-
-> At this point in time, you should be seeing your sensitive data printed in your logs
+In this step, we will start using OpenTelemetry to expose metrics. 
+Make sure that, in development, you can see all the metrics.
 
 Goal:
-- Make sure the sensitive field is not logged in the logs.
-- Make sure to use structured logging.
-- Add a correlation id to the logs.
+- Make sure that metrics are published using OpenTelemetry.
+- The metrics should be visible in the .NET Aspire dashboard.
+- Add .NET Runtime metrics
+- Add ASP.NET Core metrics
+
+# Step 03: Add custom Metrics to the solution
+
+In this step, we will will be adding our own, custom, metrics.
+Make sure that the code you write is easily (re)usable.
+
+Goal:
+- Add a metric that shows the number of active Units of Work.
+- Add a metric that shows the number of Units of Work that have been completed.
+- Add a metric that shows the number of projects that have exist.
