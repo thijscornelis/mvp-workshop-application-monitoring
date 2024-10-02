@@ -13,7 +13,10 @@ public static class OtelExtensions
             {
                 c.AddAspNetCoreInstrumentation();
                 c.AddHttpClientInstrumentation();
+                c.AddMeter(UnitOfWorkMetrics.MeterName);
                 c.AddOtlpExporter();
             });
+
+        builder.Services.AddSingleton<ITrackUnitOfWork, UnitOfWorkMetrics>();
     }
 }
