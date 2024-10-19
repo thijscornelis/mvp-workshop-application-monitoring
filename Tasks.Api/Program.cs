@@ -2,6 +2,7 @@ using ProjectManagement.Common.Logging;
 using ProjectManagement.Common.Otel;
 using Tasks.Management;
 using Tasks.Management.PostgreSql;
+using Tasks.Management.RabbitMq;
 using Tasks.Management.RestApi;
 
 namespace Tasks.Api;
@@ -22,6 +23,7 @@ public class Program
         builder.Services.AddTaskManagement(builder.Configuration, c =>
         {
             c.AddPostgreSql("tasks-db-server");
+            c.AddRabbitMq("rabbitmq");
             c.AddRestApi();
         });
         var app = builder.Build();

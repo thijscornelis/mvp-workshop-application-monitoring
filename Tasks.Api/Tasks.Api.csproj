@@ -10,12 +10,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ProjectManagement.Common\ProjectManagement.Common.csproj" />
     <ProjectReference Include="..\Tasks.Management.PostgreSql\Tasks.Management.PostgreSql.csproj" />
+    <ProjectReference Include="..\Tasks.Management.RabbitMq\Tasks.Management.RabbitMq.csproj" />
     <ProjectReference Include="..\Tasks.Management.RestApi\Tasks.Management.RestApi.csproj" />
     <ProjectReference Include="..\Tasks.Management\Tasks.Management.csproj" />
   </ItemGroup>

@@ -1,18 +1,16 @@
-﻿using MassTransit;
+﻿using System.Reflection;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Projects.Management.Design;
+using Tasks.Management.Design;
 
-namespace Projects.Management.RabbitMq;
-
-public static class ProjectManagementExtensions
+namespace Tasks.Management.RabbitMq;
+public static class TaskManagementExtensions
 {
-    public static IProjectManagementRegistration AddRabbitMq(this IProjectManagementRegistration registration, string rabbitMqConnectionStringName)
+    public static ITaskManagementRegistration AddRabbitMq(this ITaskManagementRegistration registration, string rabbitMqConnectionStringName)
     {
-        registration.Services.AddTransient<ICanPublishProjectDeleted, ProjectDeletedPublisher>();
-
         registration.Services.AddMassTransit(c =>
         {
+            c.AddConsumer<DeleteTasksRelatedToProjectOnProjectDeleted>();
             c.UsingRabbitMq((context, config) =>
             {
                 config.ConfigureEndpoints(context);

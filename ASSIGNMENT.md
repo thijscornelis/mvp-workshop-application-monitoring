@@ -8,31 +8,27 @@ The solution folders `01. Projects` and `02. Tasks` contain the two services tha
 Each service uses a `hexagonal architecture`. The main goal is that our core project remains technology agnostic, contains the business logic 
 and defines functionality that will be provided by our ports and adapters. 
 
-# Step 01: Add OpenTelemetry for Logs to the solution
+# Step 01: Add OpenTelemetry for Traces to the solution
 
-In this step, we will start using OpenTelemetry to expose logs.
-
-Goal:
-- Make sure that the log messages are published using OpenTelemetry.
-- The log messages should be visible in the .NET Aspire dashboard.
-
-# Step 02: Add OpenTelemetry for Metrics to the solution
-
-In this step, we will start using OpenTelemetry to expose metrics. 
-Make sure that, in development, you can see all the metrics.
+In this step, we will start using OpenTelemetry to expose traces.
 
 Goal:
-- Make sure that metrics are published using OpenTelemetry.
-- The metrics should be visible in the .NET Aspire dashboard.
-- Add .NET Runtime metrics
-- Add ASP.NET Core metrics
+- Make sure that the traces are published using OpenTelemetry.
+- The traces should be visible in the .NET Aspire dashboard, logs should be linked.
 
-# Step 03: Add custom Metrics to the solution
+# Step 02: Update the solution to include distributed tracing
 
-In this step, we will will be adding our own, custom, metrics.
-Make sure that the code you write is easily (re)usable.
+The solution is now setup to use OpenTelemetry for traces. In this step, we will add distributed tracing to the solution.
+Our Projects API will publish a ProjectDeleted event when a project is deleted. The Tasks API will listen to this event and remove all tasks that are created for the project.
 
 Goal:
-- Add a metric that shows the number of active Units of Work.
-- Add a metric that shows the number of Units of Work that have been completed.
-- Add a metric that shows the number of projects that have exist.
+- The trace should be visible in the .NET Aspire dashboard, logs should be linked.
+- The trace should show the ProjectDeleted event as a span
+- The trace should show the Database interaction as a span
+
+# Step 03: Add custom spans
+
+We want to be able to track the individual processing time for a task deletion. To do this, we will add a custom span for each task that is deleted.
+
+Goal:
+- A Custom Span is visible for each Task that is deleted. The Span should contain the Id's of the Project and Task that are deleted.

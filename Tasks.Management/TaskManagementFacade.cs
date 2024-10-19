@@ -27,4 +27,16 @@ internal class TaskManagementFacade(ICanStoreTask store, ICanFindTask finder) : 
         }
         await store.DeleteAsync(task, cancellationToken);
     }
+
+    public async System.Threading.Tasks.Task DeleteTasksForProjectAsync(DeleteTasksForProject request,
+        CancellationToken cancellationToken)
+    {
+        var tasks = await finder.FindByProjectIdAsync(request.ProjectId, cancellationToken)
+            .ToListAsync(cancellationToken);
+
+        foreach (var task in tasks)
+        {
+            await store.DeleteAsync(task, cancellationToken);
+        }
+    }
 }

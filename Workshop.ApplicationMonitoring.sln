@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tasks.Management.PostgreSql
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tasks.Management.RestApi", "Tasks.Management.RestApi\Tasks.Management.RestApi.csproj", "{0717F51C-4727-42F1-9F32-CB3F07E323B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tasks.Management.RabbitMq", "Tasks.Management.RabbitMq\Tasks.Management.RabbitMq.csproj", "{77830362-0B3A-4233-B135-C9C261DD750F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{0717F51C-4727-42F1-9F32-CB3F07E323B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0717F51C-4727-42F1-9F32-CB3F07E323B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0717F51C-4727-42F1-9F32-CB3F07E323B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77830362-0B3A-4233-B135-C9C261DD750F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77830362-0B3A-4233-B135-C9C261DD750F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77830362-0B3A-4233-B135-C9C261DD750F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77830362-0B3A-4233-B135-C9C261DD750F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +116,7 @@ Global
 		{3E5818E5-C2E4-48F9-8766-D107CE7D99D3} = {34E48476-67D9-4659-8EFD-1A09C26934AB}
 		{854A2912-294B-4BF3-9D2C-FCF791542626} = {34E48476-67D9-4659-8EFD-1A09C26934AB}
 		{0717F51C-4727-42F1-9F32-CB3F07E323B7} = {34E48476-67D9-4659-8EFD-1A09C26934AB}
+		{77830362-0B3A-4233-B135-C9C261DD750F} = {34E48476-67D9-4659-8EFD-1A09C26934AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1E307495-6ABC-41CD-BD05-121B905CC268}

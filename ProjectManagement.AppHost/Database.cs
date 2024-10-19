@@ -14,6 +14,5 @@ internal static class Database
         databaseServer.AddDatabase(databaseName);
 
         return databaseServer;
-
     }
 }

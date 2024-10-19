@@ -30,7 +30,7 @@ public class Program
         builder.Services.AddProjectManagement(builder.Configuration, c => c
             .AddPostgreSql("projects-db-server")
             .AddRestApi()
-            .AddRabbitMq()
+            .AddRabbitMq("rabbitmq")
         );
 
         var app = builder.Build();
