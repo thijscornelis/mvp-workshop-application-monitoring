@@ -22,6 +22,7 @@ public class Program
             c.ByIgnoringProperties<CreateProjectRequestDto>(x => x.Owner);
         });
         builder.AddMetrics();
+        builder.AddTracing("Projects.API");
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();

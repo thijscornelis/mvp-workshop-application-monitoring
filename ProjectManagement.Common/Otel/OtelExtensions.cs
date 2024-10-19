@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
 
 namespace ProjectManagement.Common.Otel;
 
@@ -18,5 +19,22 @@ public static class OtelExtensions
             });
 
         builder.Services.AddSingleton<ITrackUnitOfWork, UnitOfWorkMetrics>();
+    }
+
+    public static void AddTracing(this IHostApplicationBuilder builder, params string[] customSources)
+    {
+        builder.Services.AddOpenTelemetry()
+            .WithTracing(c =>
+            {
+                if (builder.Environment.IsDevelopment())
+                {
+                    c.SetSampler(new AlwaysOnSampler());
+                }
+
+                c.AddAspNetCoreInstrumentation();
+                c.AddHttpClientInstrumentation();
+                c.AddSource(customSources);
+                c.AddOtlpExporter();
+            });
     }
 }

@@ -15,6 +15,7 @@ public class Program
 
         builder.SetupLogging();
         builder.AddMetrics();
+        builder.AddTracing("Tasks.API");
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();

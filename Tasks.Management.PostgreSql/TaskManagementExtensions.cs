@@ -14,7 +14,10 @@ public static class TaskManagementExtensions
         var connectionString = registration.Configuration.GetConnectionString(connectionStringName);
         connectionString += ";Database=tasks-db;";
         
-        registration.Services.AddPostgreSqlDbContext<TaskDbContext>(builder => builder.UseNpgsql(connectionString));
+        registration.Services.AddPostgreSqlDbContext<TaskDbContext>(builder =>
+        {
+            builder.UseNpgsql(connectionString);
+        });
         registration.Services.AddScoped<ICanStoreTask, TaskStore>();
         registration.Services.AddScoped<ICanFindTask, TaskQueries>();
         return registration;
