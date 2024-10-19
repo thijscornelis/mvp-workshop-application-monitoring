@@ -8,29 +8,31 @@ The solution folders `01. Projects` and `02. Tasks` contain the two services tha
 Each service uses a `hexagonal architecture`. The main goal is that our core project remains technology agnostic, contains the business logic 
 and defines functionality that will be provided by our ports and adapters. 
 
-# Step 01: Add OpenTelemetry for Traces to the solution
+# Step 01: Setup OpenTelemetry like you would in an production environment
 
-In this step, we will start using OpenTelemetry to expose traces.
-
-Goal:
-- Make sure that the traces are published using OpenTelemetry.
-- The traces should be visible in the .NET Aspire dashboard, logs should be linked.
-
-# Step 02: Update the solution to include distributed tracing
-
-The solution is now setup to use OpenTelemetry for traces. In this step, we will add distributed tracing to the solution.
-Our Projects API will publish a ProjectDeleted event when a project is deleted. The Tasks API will listen to this event and remove all tasks that are created for the project.
+Up until now, we've been able to use the Aspire Dashboard to collect our OpenTelemetry logging/metrics/traces. In a production environment, we would want a more production ready solution.
+Therefore, we will start by setting up an OpenTelemetry Collector to collect the logging/metrics/traces and dump them in the console of the container.
+All of our services should run inside docker containers.
 
 Goal:
-- The trace should be visible in the .NET Aspire dashboard, logs should be linked.
-- The trace should show the ProjectDeleted event as a span
-- The trace should show the Database interaction as a span
+- Setup a docker compose project file with our Tasks API, Projects API and OpenTelemetry Collector.
+- Setup the OpenTelemetry Collector to collect the logging/metrics/traces and dump them in the console of the container.
 
-# Step 03: Add custom spans
+# Step 02: Add Jaeger, Loki, Prometheus
 
-We want to be able to track the individual processing time for a task deletion. To do this, we will add a custom span for each task that is deleted.
-
-https://learn.microsoft.com/en-us/dotnet/core/diagnostics/distributed-tracing-instrumentation-walkthroughs
+Now that our OpenTelemetry Collector is setup, we want to add Jaeger, Loki and Prometheus to our setup. This will allow us to visualize our traces, logs and metrics.
 
 Goal:
-- A Custom Span is visible for each Task that is deleted. The Span should contain the Id's of the Project and Task that are deleted.
+- The logs should be visible in Loki
+- The metrics should be visible in Prometheus
+- The traces should be visible in Jaeger
+
+# Step 03: Combine the data in Grafana
+
+Add Grafana to the setup and combine the data from Jaeger, Loki and Prometheus in one dashboard.
+
+Goal:
+- The logs, metrics and traces should be visible in Grafana
+- The dashboard should be setup in a way that it is easy to see the correlation between the logs, metrics and traces
+- The dashboard should visualize the performance of the system
+- The dashboard should alert when we have more than 10 projects
