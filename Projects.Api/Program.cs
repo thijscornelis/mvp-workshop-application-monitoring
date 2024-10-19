@@ -1,4 +1,5 @@
 using Destructurama;
+using MassTransit.Logging;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.Common.Logging;
 using ProjectManagement.Common.Otel;
@@ -22,7 +23,7 @@ public class Program
             c.ByIgnoringProperties<CreateProjectRequestDto>(x => x.Owner);
         });
         builder.AddMetrics();
-        builder.AddTracing("Projects.API");
+        builder.AddTracing("Projects.API", DiagnosticHeaders.DefaultListenerName);
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Npgsql;
+using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
@@ -15,7 +17,11 @@ public static class OtelExtensions
                 c.AddAspNetCoreInstrumentation();
                 c.AddHttpClientInstrumentation();
                 c.AddMeter(UnitOfWorkMetrics.MeterName);
-                c.AddOtlpExporter();
+                c.AddOtlpExporter((e, m) =>
+                {
+                    e.ExportProcessorType = ExportProcessorType.Simple;
+                    m.PeriodicExportingMetricReaderOptions.ExportIntervalMilliseconds = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
+                });
             });
 
         builder.Services.AddSingleton<ITrackUnitOfWork, UnitOfWorkMetrics>();
@@ -33,6 +39,7 @@ public static class OtelExtensions
 
                 c.AddAspNetCoreInstrumentation();
                 c.AddHttpClientInstrumentation();
+                c.AddNpgsql();
                 c.AddSource(customSources);
                 c.AddOtlpExporter();
             });

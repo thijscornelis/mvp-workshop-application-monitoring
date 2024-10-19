@@ -1,3 +1,4 @@
+using MassTransit.Logging;
 using ProjectManagement.Common.Logging;
 using ProjectManagement.Common.Otel;
 using Tasks.Management;
@@ -15,7 +16,7 @@ public class Program
 
         builder.SetupLogging();
         builder.AddMetrics();
-        builder.AddTracing("Tasks.API");
+        builder.AddTracing("Tasks.API", DiagnosticHeaders.DefaultListenerName);
 
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
