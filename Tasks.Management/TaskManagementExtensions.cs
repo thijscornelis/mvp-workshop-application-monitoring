@@ -10,7 +10,7 @@ public static class TaskManagementExtensions
     {
         var registration = new TaskManagementRegistration(serviceCollection, configuration);
         configure(registration);
-        registration.Services.AddTransient<ITaskManagementFacade, TaskManagementFacade>();
+        registration.Services.AddTransient<ITaskManagementFacade, TaskManagementFacade>(); 
         return serviceCollection;
     }
 }

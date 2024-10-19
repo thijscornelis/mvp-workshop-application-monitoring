@@ -1,4 +1,5 @@
-﻿using Tasks.Management.Contracts;
+﻿using System.Diagnostics;
+using Tasks.Management.Contracts;
 using Tasks.Management.Design;
 using Task = Tasks.Management.Domain.Task;
 
@@ -6,6 +7,9 @@ namespace Tasks.Management;
 
 internal class TaskManagementFacade(ICanStoreTask store, ICanFindTask finder) : ITaskManagementFacade
 {
+    private static readonly ActivitySource _source = new ("Tasks.API");
+
+
     public async Task<Task> CreateTaskAsync(CreateTaskRequest request, CancellationToken cancellationToken)
     {
         var task = new Task(request.ProjectId, request.Name);
@@ -36,7 +40,11 @@ internal class TaskManagementFacade(ICanStoreTask store, ICanFindTask finder) : 
 
         foreach (var task in tasks)
         {
+            using var activity = _source.StartActivity();
+            activity?.SetTag("ProjectId", request.ProjectId);
+            activity?.SetTag("TaskId", task.Id);
             await store.DeleteAsync(task, cancellationToken);
+            activity?.AddEvent(new ActivityEvent("Deleted successfully"));
         }
     }
 }

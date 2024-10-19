@@ -30,5 +30,7 @@ Goal:
 
 We want to be able to track the individual processing time for a task deletion. To do this, we will add a custom span for each task that is deleted.
 
+https://learn.microsoft.com/en-us/dotnet/core/diagnostics/distributed-tracing-instrumentation-walkthroughs
+
 Goal:
 - A Custom Span is visible for each Task that is deleted. The Span should contain the Id's of the Project and Task that are deleted.
