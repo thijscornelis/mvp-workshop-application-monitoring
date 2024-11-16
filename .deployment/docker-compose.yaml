@@ -1,0 +1,161 @@
+name: "mvp-workshop"
+services:
+  loki:
+    image: grafana/loki:3.1.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+  
+  jaeger:    
+    image: jaegertracing/all-in-one:1.63.0
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:      
+      - 16686:16686
+      - 4317
+      - 4318
+  
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/config.yml'
+    volumes:
+      - ./prometheus/config.yml:/etc/prometheus/config.yml
+      - prometheus-data:/prometheus
+    restart: unless-stopped
+  
+  grafana:
+    image: grafana/grafana-oss:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+
+  otel-collector:
+    image: otel/opentelemetry-collector:0.95.0
+    command: ["--config=/etc/otel-collector-config.yml"]
+    volumes:
+      - ./otel-collector/config.yml:/etc/otel-collector-config.yml
+    ports:
+      - "8888:8888" 
+      - "8889:8889" 
+      - "13133:13133"
+      - "4317:4317"
+    restart: always
+
+  projects-db-server:
+    container_name: "projects-db-server"
+    image: "docker.io/library/postgres:16.4"
+    environment:
+      POSTGRES_USER: "guest"
+      POSTGRES_PASSWORD: "guest"
+      POSTGRES_DB: "projects-db"
+    volumes:
+    - "projects-db-server-data:/var/lib/postgresql/data"
+    restart: unless-stopped
+    healthcheck:
+      test: pg_isready -d projects-db -U guest
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  tasks-db-server:
+    container_name: "tasks-db-server"
+    image: "docker.io/library/postgres:16.4"
+    environment:
+      POSTGRES_USER: "guest"
+      POSTGRES_PASSWORD: "guest"
+      POSTGRES_DB: "tasks-db"
+    volumes:
+    - "tasks-db-server-data:/var/lib/postgresql/data"
+    restart: unless-stopped
+    healthcheck:
+      test: pg_isready -d tasks-db -U guest
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  rabbitmq:
+    container_name: "rabbitmq"
+    image: "docker.io/library/rabbitmq:3.13-management"
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    ports:
+    - target: 15672
+      published: 15672
+    restart: unless-stopped
+    healthcheck:
+      test: rabbitmq-diagnostics -q status
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    user: root
+    ports:
+      - "32871:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin4@pgadmin.org"
+      PGADMIN_DEFAULT_PASSWORD: "root"
+      MASTER_PASSWORD_REQUIRED: "False"
+      PGADMIN_CONFIG_SERVER_MODE: "False"   
+    volumes:
+      - "pgadmin-server-data:/var/lib/pgadmin"
+      - "./pgadmin-servers.json:/pgadmin4/servers.json"
+
+  projects-api:
+    container_name: "projects-api"
+    build:
+      context: ../.
+      dockerfile: ./Projects.Api/Dockerfile
+    environment:
+      OTEL_SERVICE_NAME: "projects-api"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      HTTP_PORTS: "8081"
+      ConnectionStrings__projects-db-server: "Host=projects-db-server;Port=5432;Username=guest;Password=guest"
+      ConnectionStrings__rabbitmq: "amqp://guest:guest@rabbitmq:5672"
+    ports:
+    - target: 8081
+      published: 5001
+    depends_on:
+      projects-db-server:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped  
+
+  tasks-api:
+    container_name: "tasks-api"
+    build:
+      context: ../.
+      dockerfile: ./Tasks.Api/Dockerfile
+    environment:
+      OTEL_SERVICE_NAME: "tasks-api"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      HTTP_PORTS: "8081"
+      ConnectionStrings__tasks-db-server: "Host=tasks-db-server;Port=5432;Username=guest;Password=guest"
+      ConnectionStrings__rabbitmq: "amqp://guest:guest@rabbitmq:5672"
+    depends_on:
+      tasks-db-server:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+    - target: 8081
+      published: 6001
+volumes:
+  projects-db-server-data: {}
+  tasks-db-server-data: {}
+  pgadmin-server-data: {}
+  grafana-data: {}
+  prometheus-data: {}
+  tempo-data: {}

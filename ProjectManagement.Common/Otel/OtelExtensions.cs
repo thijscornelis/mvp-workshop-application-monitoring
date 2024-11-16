@@ -17,11 +17,7 @@ public static class OtelExtensions
                 c.AddAspNetCoreInstrumentation();
                 c.AddHttpClientInstrumentation();
                 c.AddMeter(UnitOfWorkMetrics.MeterName);
-                c.AddOtlpExporter((e, m) =>
-                {
-                    e.ExportProcessorType = ExportProcessorType.Simple;
-                    m.PeriodicExportingMetricReaderOptions.ExportIntervalMilliseconds = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
-                });
+                c.AddOtlpExporter();
             });
 
         builder.Services.AddSingleton<ITrackUnitOfWork, UnitOfWorkMetrics>();

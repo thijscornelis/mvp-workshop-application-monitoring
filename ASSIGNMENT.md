@@ -1,38 +1,31 @@
 # Solution structure
 
-The solution is setup to develop and maintain a distributed system using [.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/get-started/aspire-overview).
-To startup the system, make sure to have `ProjectManagement.AppHost` as the startup project.
-
-The solution folders `01. Projects` and `02. Tasks` contain the two services that together are the distributed system.
-
-Each service uses a `hexagonal architecture`. The main goal is that our core project remains technology agnostic, contains the business logic 
-and defines functionality that will be provided by our ports and adapters. 
-
-# Step 01: Setup OpenTelemetry like you would in an production environment
-
 Up until now, we've been able to use the Aspire Dashboard to collect our OpenTelemetry logging/metrics/traces. In a production environment, we would want a more production ready solution.
-Therefore, we will start by setting up an OpenTelemetry Collector to collect the logging/metrics/traces and dump them in the console of the container.
-All of our services should run inside docker containers.
+We've provided you with a working docker-compose file, which is setup the projects you already know without .NET Aspire. You should be able to run `docker-compose up` from inside of the `.deployement` server.
 
-Goal:
-- Setup a docker compose project file with our Tasks API, Projects API and OpenTelemetry Collector.
-- Setup the OpenTelemetry Collector to collect the logging/metrics/traces and dump them in the console of the container.
+[Projects API](http://localhost:5001/swagger/index.html)
+[Tasks API](http://localhost:6001/swagger/index.html)
+[RabbitMQ Management](http://localhost:15672/)
+[PgAdmin](http://localhost:32871/browser/)
 
-# Step 02: Add Jaeger, Loki, Prometheus
+# Step 01: Forward data to the correct service
 
-Now that our OpenTelemetry Collector is setup, we want to add Jaeger, Loki and Prometheus to our setup. This will allow us to visualize our traces, logs and metrics.
+We've added an `otel-collector` so that our Open Telemetry is captured. Alongside of that container, we've also added:
+  - Loki for logs
+  - Tempo for traces
+  - Prometheus for metrics
 
-Goal:
-- The logs should be visible in Loki
-- The metrics should be visible in Prometheus
-- The traces should be visible in Jaeger
+Extend the collector's configuration so that logs, metrics and traces are sent to the correct container.
 
-# Step 03: Combine the data in Grafana
+# Step 02: Combine the data in Grafana
 
-Add Grafana to the setup and combine the data from Jaeger, Loki and Prometheus in one dashboard.
+Using the provided [Grafana instance](http://localhost:3000/) (admin:admin), setup the data sources for and combine the data from Loki, Tempo and Prometheus in one dashboard.
 
 Goal:
 - The logs, metrics and traces should be visible in Grafana
 - The dashboard should be setup in a way that it is easy to see the correlation between the logs, metrics and traces
 - The dashboard should visualize the performance of the system
 - The dashboard should alert when we have more than 10 projects
+
+# Read more
+[A Beginner's Guide to the OpenTelemetry Collector](https://betterstack.com/community/guides/observability/opentelemetry-collector/)

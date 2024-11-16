@@ -1,0 +1,25 @@
+{
+    "Servers": {
+      "projects-db-server": {
+        "Name": "projects-db-server",
+        "Group": "Servers",
+        "Port": 5432,
+        "Username": "guest",
+        "Password": "guest",
+        "Host": "projects-db-server",
+        "SSLMode": "prefer",
+        "MaintenanceDB": "projects-db"
+      },
+      "tasks-db-server": {
+        "Name": "tasks-db-server",
+        "Group": "Servers",
+        "Port": 5432,
+        "Username": "guest",
+        "Password": "guest",
+        "Host": "tasks-db-server",
+        "SSLMode": "prefer",
+        "MaintenanceDB": "tasks-db"
+      }
+    }
+  }
+  
