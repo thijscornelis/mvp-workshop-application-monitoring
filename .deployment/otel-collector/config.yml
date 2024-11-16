@@ -1,0 +1,18 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: otel-collector:4317
+
+extensions:
+  health_check:
+
+service:
+  extensions: [health_check]
+  pipelines:
+    logs:
+      receivers: [otlp]      
+    metrics:
+      receivers: [otlp]      
+    traces:
+      receivers: [otlp]      
