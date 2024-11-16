@@ -4,6 +4,21 @@ receivers:
       grpc:
         endpoint: otel-collector:4317
 
+exporters:
+  debug:
+    verbosity: basic
+  otlphttp:
+    endpoint: http://loki:3100/otlp
+    tls:
+      insecure: true
+  otlp/tempo:
+    endpoint: http://loki:4317
+    tls:
+      insecure: true
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    namespace: default
+
 extensions:
   health_check:
 
@@ -12,7 +27,10 @@ service:
   pipelines:
     logs:
       receivers: [otlp]      
+      exporters: [debug, otlphttp]
     metrics:
       receivers: [otlp]      
+      exporters: [debug, prometheus]
     traces:
       receivers: [otlp]      
+      exporters: [debug, otlp/tempo]

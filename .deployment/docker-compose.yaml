@@ -160,7 +160,4 @@ volumes:
   pgadmin-server-data: {}
   grafana-data: {}
   prometheus-data: {}
-<<<<<<< HEAD
   tempo-data: {}
-=======
->>>>>>> ce93bfc (replace aspire orchestration with docker-compose file)
