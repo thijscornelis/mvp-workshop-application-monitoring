@@ -26,6 +26,7 @@ distributor:
   receivers:
     otlp:
       protocols:
+        http:
         grpc:
 
 ingester:

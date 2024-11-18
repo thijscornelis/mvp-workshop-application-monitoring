@@ -7,6 +7,7 @@ using Serilog;
 using Serilog.Configuration;
 using Serilog.Events;
 using Serilog.Formatting.Json;
+using Serilog.Sinks.OpenTelemetry;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace ProjectManagement.Common.Logging;
@@ -16,7 +17,10 @@ public static class LoggingExtensions
     public static void SetupLogging(this IHostApplicationBuilder builder, Action<LoggerDestructuringConfiguration>? destructuringConfiguration = null)
     {
         builder.Logging.ClearProviders();
-
+        builder.Logging.Configure(x => x.ActivityTrackingOptions = ActivityTrackingOptions.TraceId |
+                                                                   ActivityTrackingOptions.SpanId |
+                                                                   ActivityTrackingOptions.ParentId |
+                                                                   ActivityTrackingOptions.Baggage);
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSerilog(c =>
         {
@@ -39,7 +43,11 @@ public static class LoggingExtensions
             c.MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning);
             c.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning);
             c.WriteTo.Console(theme: AnsiConsoleTheme.Code, applyThemeToRedirectedOutput: true);
-            c.WriteTo.OpenTelemetry();
+            c.WriteTo.OpenTelemetry(x =>
+            {
+                x.IncludedData = IncludedData.SpanIdField | IncludedData.TraceIdField |
+                                 IncludedData.MessageTemplateRenderingsAttribute;
+            });
         });
     }
 
